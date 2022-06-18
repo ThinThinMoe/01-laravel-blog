@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -15,6 +16,13 @@ class LoginController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect('login')->withErrors($validator)->withInput();
+        }
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {

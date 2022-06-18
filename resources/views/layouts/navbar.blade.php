@@ -18,7 +18,12 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        <li>
+                            <form id="logout-form" action="{{ url('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-body border-0 px-3">Logout</button>
+                            </form>
+                        </li>
                     </ul>
                 </li>
                 @else

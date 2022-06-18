@@ -14,21 +14,29 @@
 
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email"
+                            <input 
+                                type="email" 
                                 name="email"
-                                class="form-control">
+                                class="form-control @error('email') is-invalid @enderror"
+                                value="{{ old('email') }}">
                         </div>
+                        @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
 
                         <div class="mb-3">
-                            <label
-                                class="form-label">Password</label>
-                            <input type="password"
-                                name="password"
-                                class="form-control">
+                            <label class="form-label">Password</label>
+                            <input 
+                                type="password"n
+                                name="password" 
+                                class="form-control @error('password') is-invalid @enderror"
+                                value="{{ old('password') }}" autocomplete="off">
                         </div>
+                        @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
 
-                        <button type="submit"
-                            class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
                     </form>
                 </div>
             </div>
