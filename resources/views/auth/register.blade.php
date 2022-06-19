@@ -18,11 +18,11 @@
                                 name="name"
                                 class="form-control @error('name') is-invalid @enderror"
                                 value="{{ old('name') }}">
+                            @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-
+                       
                         <div class="mb-3">
                             <label class="form-label">Email</label>
                             <input
@@ -30,10 +30,10 @@
                                 name="email"
                                 class="form-control @error('email') is-invalid @enderror"
                                 value="{{ old('email') }}">
+                            @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
 
                         <div class="mb-3">
                             <label class="form-label">Password</label>
@@ -42,10 +42,10 @@
                                 name="password"
                                 class="form-control @error('password') is-invalid @enderror"
                                 value="{{ old('password') }}">
+                            @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
 
                         <button type="submit" class="btn btn-primary">Register</button>
                     </form>

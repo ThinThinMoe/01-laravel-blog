@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -21,30 +20,11 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'body' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return redirect('posts/create')->withErrors($validator)->withInput();
-        }
-        // $request->validate([
-        //     'title' => 'required',
-        //     'body' => 'required|min:5',
-        // ], [
-        //     'title.required' => "changed title required message",
-        //     'body.required'  => "changed body required message",
-        //     'body.min'       => "changed body text limitation message",
-        // ]);
+        Post::create($request->except(['_token']));
 
-        $post = new Post();
-        $post->title = $request->title;
-        $post->body =  $request->body;
-        $post->created_at = now();
-        $post->updated_at = now();
-        $post->save();
+        session()->flash('success', 'A post was created successfully.');
 
         return redirect('/posts');
     }
@@ -58,20 +38,11 @@ class PostController extends Controller
 
     public function update(PostRequest $request, $id)
     {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'body' => 'required|min:5',
-        // ], [
-        //     'title.required' => "changed title required message",
-        //     'body.required'  => "changed body required message",
-        //     'body.min'       => "changed body text limitation message",
-        // ]);
-
         $post = Post::find($id);
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->updated_at = now();
-        $post->save();
+
+        $post->update($request->only(['title', 'body']));
+
+        $request->session()->flash('success', 'A post was updated successful!');
 
         return redirect('/posts');
     }
@@ -87,6 +58,6 @@ class PostController extends Controller
     {
         Post::destroy($id);
 
-        return redirect('/posts');
+        return redirect('/posts')->with('success', 'A post was deleted successful!');
     }
 }
