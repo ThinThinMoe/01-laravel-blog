@@ -7,6 +7,7 @@
         </div>
         <div class="card-body">
             <h3>{{ $post->title }}</h3>
+            <p>Post by <b> {{ $post->user->name }} </b> on <i>{{ $post->created_at->diffForHumans() }}</i></p>
             <p>{{ $post->body }}</p>
         </div>
         <div class="card-footer">

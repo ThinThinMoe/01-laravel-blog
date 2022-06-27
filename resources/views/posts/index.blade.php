@@ -11,9 +11,10 @@
         @foreach ($posts as $post)
         <div>
             <h3><a href="/posts/{{ $post->id }}">{{ $post->title }}</a></h3>
-            {{ $post->created_at->diffForHumans()}} by Mark
+            <i>{{ $post->created_at->diffForHumans() }}</i>
+            by <b> {{ $post->user->name }} </b>
             <p>{{ $post->body }}</p>
-            @auth
+            @if($post->isOwnPosts())
             <div class="d-flex justify-content-end">
                 <a href="/posts/{{ $post->id }}/edit/" class="btn btn-outline-success">Edit</a>
                 <form action="/posts/{{ $post->id }}" method="POST" onsubmit="return confirm('Are you sure to delete?')">
@@ -22,10 +23,10 @@
                     <button type="submit" class="btn btn-outline-danger ms-2">Delete</button>
                 </form>
             </div>
-            @endauth
+            @endif
         </div>
-
         <hr>
         @endforeach
+        {{ $posts->links()}}
     </div>
 @endsection

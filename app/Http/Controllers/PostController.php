@@ -10,7 +10,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(5);
 
         return view('posts.index', compact('posts'));
     }
@@ -22,7 +22,11 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        Post::create($request->except(['_token']));
+        Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'user_id' => auth()->id(),
+        ]);
 
         session()->flash('success', 'A post was created successfully.');
 
