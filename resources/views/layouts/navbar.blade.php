@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="/posts">Blog</a>
+        <a class="navbar-brand" href="/categories">Blog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -15,6 +15,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/my-posts">My Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/categories/create">Create A Cateogry</a>
                 </li>
                 @endauth
                 @if(Auth::check())

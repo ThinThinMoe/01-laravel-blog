@@ -14,6 +14,15 @@
             <i>{{ $post->created_at->diffForHumans() }}</i>
             by <b> {{ $post->user->name }} </b>
             <p>{{ $post->body }}</p>
+            <p>
+                @foreach ($post->categories as $key => $category)
+                    @if ($key > 0)
+                        {{ ', '  . $category->name }}
+                    @else
+                        {{ $category->name }}
+                    @endif
+                @endforeach
+            </p>
             @if($post->isOwnPosts())
             <div class="d-flex justify-content-end">
                 <a href="/posts/{{ $post->id }}/edit/" class="btn btn-outline-success">Edit</a>

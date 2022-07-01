@@ -25,6 +25,27 @@
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">Select Categories</label>
+                    <select class="form-select form-select-sm" multiple name="categories[]">
+                        @php
+                            $postCategories = [];
+                        @endphp
+                        @foreach ($post->categories as $post_category)
+                            @php
+                                $postCategories[] = $post_category->id;
+                            @endphp
+                        @endforeach
+                        @foreach ($categories as $category)
+                            @if (in_array($category->id, $postCategories))
+                                <option selected value="{{ $category->id }}"> {{ $category->name }} </option>
+                            @else
+                                <option value="{{ $category->id }}"> {{ $category->name }} </option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-outline-primary">Update</button>
                     <a href="/posts" class="btn btn-outline-secondary">Back</a>

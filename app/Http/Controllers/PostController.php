@@ -4,29 +4,40 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Models\Category;
+use App\Models\CategoryPost;
 use App\Models\Post;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::paginate(5);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(5);
 
         return view('posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+
+        return view('posts.create',compact('categories'));
     }
 
     public function store(PostRequest $request)
     {
-        Post::create([
+        $post = Post::create([
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => auth()->id(),
         ]);
+
+        foreach ($request->categories as $categoryId) {
+            CategoryPost::insert([
+                'post_id' => $post->id,
+                'category_id' => $categoryId,
+            ]);
+        }
 
         session()->flash('success', 'A post was created successfully.');
 
@@ -36,8 +47,9 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        $categories = Category::all();
 
-        return view('posts.edit', compact('post'));
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     public function update(PostRequest $request, $id)
@@ -45,6 +57,16 @@ class PostController extends Controller
         $post = Post::find($id);
 
         $post->update($request->only(['title', 'body']));
+
+        if(count($request->categories) > 0) {
+            CategoryPost::where('post_id', $post->id)->delete();
+        }
+        foreach ($request->categories as $categoryId) {
+            CategoryPost::insert([
+                'post_id' => $post->id,
+                'category_id' => $categoryId,
+            ]);
+        }
 
         $request->session()->flash('success', 'A post was updated successful!');
 
