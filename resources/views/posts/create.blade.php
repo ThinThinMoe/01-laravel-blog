@@ -6,7 +6,7 @@
             <h3>Create A Post</h3>
         </div>
         <div class="card-body">
-            <form action="/posts" method="POST">
+            <form action="{{ route('post.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Post Title</label>
@@ -35,7 +35,7 @@
 
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-outline-primary">Create</button>
-                    <a href="/posts" class="btn btn-outline-secondary">Back</a>
+                    <a href="{{ route('post.index') }}" class="btn btn-outline-secondary">Back</a>
                 </div>
             </form>
         </div>

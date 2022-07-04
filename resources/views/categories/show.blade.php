@@ -9,7 +9,7 @@
             <h3>{{ $category->name }}</h3>
         </div>
         <div class="card-footer">
-            <a href="/categories">Go Home</a>
+            <a href="{{ route('category.index') }}">Go Home</a>
         </div>
     </div>
 @endsection

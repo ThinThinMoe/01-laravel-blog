@@ -6,7 +6,7 @@
             <h3>Create A Category</h3>
         </div>
         <div class="card-body">
-            <form action="/categories" method="POST">
+            <form action="{{ route('category.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Category Name</label>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-outline-primary">Create</button>
-                    <a href="/categories" class="btn btn-outline-secondary">Back</a>
+                    <a href="{{ route('category.index') }}" class="btn btn-outline-secondary">Back</a>
                 </div>
             </form>
         </div>

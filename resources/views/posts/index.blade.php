@@ -10,7 +10,7 @@
         @endif
         @foreach ($posts as $post)
         <div>
-            <h3><a href="/posts/{{ $post->id }}">{{ $post->title }}</a></h3>
+            <h3><a href="{!! route('post.show', ['id' =>  $post->id]) !!}">{{ $post->title }}</a></h3>
             <i>{{ $post->created_at->diffForHumans() }}</i>
             by <b> {{ $post->user->name }} </b>
             <p>{{ $post->body }}</p>
@@ -25,8 +25,8 @@
             </p>
             @if($post->isOwnPosts())
             <div class="d-flex justify-content-end">
-                <a href="/posts/{{ $post->id }}/edit/" class="btn btn-outline-success">Edit</a>
-                <form action="/posts/{{ $post->id }}" method="POST" onsubmit="return confirm('Are you sure to delete?')">
+                <a href="{!! route('post.edit', ['id' =>  $post->id]) !!}" class="btn btn-outline-success">Edit</a>
+                <form action="{!! route('post.delete', ['id' => $post->id]) !!}" method="POST" onsubmit="return confirm('Are you sure to delete?')">
                     @method('DELETE')
                     @csrf
                     <button type="submit" class="btn btn-outline-danger ms-2">Delete</button>

@@ -7,11 +7,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/posts">Home</a>
+                    <a class="nav-link active" href="{{ route('post.index') }}">Home</a>
                 </li>
                 @auth
                 <li class="nav-item">
-                    <a class="nav-link" href="/posts/create">Create A Post</a>
+                    <a class="nav-link" href="{{ route('post.create') }}">Create A Post</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/my-posts">My Posts</a>

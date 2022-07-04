@@ -6,7 +6,7 @@
             <h3>Edit A Post</h3>
         </div>
         <div class="card-body">
-            <form action="/posts/{{ $post->id }}" method="POST">
+            <form action="{!! route('post.update', ['id' =>  $post->id]) !!}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -48,7 +48,7 @@
 
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-outline-primary">Update</button>
-                    <a href="/posts" class="btn btn-outline-secondary">Back</a>
+                    <a href="{{ route('post.index') }}" class="btn btn-outline-secondary">Back</a>
                 </div>
             </form>
         </div>

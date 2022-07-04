@@ -11,7 +11,7 @@
             <p>{{ $post->body }}</p>
         </div>
         <div class="card-footer">
-            <a href="/posts">Go Home</a>
+            <a href="{{ route('post.index') }}">Go Home</a>
         </div>
     </div>
 @endsection
