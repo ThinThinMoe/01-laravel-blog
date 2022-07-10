@@ -6,6 +6,7 @@ use App\Http\Controllers\MyPostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
+use Illuminate\Support\Facades\Storage;
 
 Route::redirect('/', '/posts');
 
@@ -38,3 +39,17 @@ Route::post('logout', [LoginController::class, 'destroy']);
 
 
 Route::get('my-posts', [MyPostController::class, 'index']);
+
+
+Route::get('create', function() {
+    Storage::disk('public')->put('test.txt', 'testing123');
+});
+
+Route::get('file', function() {
+    return Storage::disk('public')->get('test.txt');
+});
+
+Route::get('delete', function() {
+    return Storage::disk('public')->delete('test.txt');
+});
+

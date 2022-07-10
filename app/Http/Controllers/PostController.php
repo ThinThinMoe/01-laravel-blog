@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
-use App\Models\Category;
-use App\Models\CategoryPost;
 use App\Models\Post;
+use Illuminate\Http\Request;
+use  App\Http\Requests\PostRequest;
+use App\Models\Category;
+use App\Models\PostImage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::orderBy('id', 'desc')->paginate(5);
+        $posts = Post::where('title', 'like', '%' . $request->search . '%')
+                ->orderBy('id', 'desc')
+                ->paginate(3);
 
         return view('posts.index', compact('posts'));
     }
@@ -21,61 +26,84 @@ class PostController extends Controller
     {
         $categories = Category::all();
 
-        return view('posts.create',compact('categories'));
+        return view('posts.create', compact('categories'));
     }
+
 
     public function store(PostRequest $request)
     {
-        $post = Post::create([
+        $post = auth()->user()->posts()->create([
             'title' => $request->title,
-            'body' => $request->body,
-            'user_id' => auth()->id(),
+            'body' => $request->body
         ]);
 
-        foreach ($request->categories as $categoryId) {
-            CategoryPost::insert([
+        // upload multiple image
+        foreach($request->file('images') as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $dir = public_path('upload/images');
+            $file->move($dir, $filename);
+
+            PostImage::create([
                 'post_id' => $post->id,
-                'category_id' => $categoryId,
+                'path' => '/upload/images/' . $filename,
             ]);
         }
 
-        session()->flash('success', 'A post was created successfully.');
+        $post->categories()->attach($request->category_ids);
 
-        return redirect('/posts');
+        return redirect('/posts')->with('success', 'A post was created successfully.');
     }
 
     public function edit($id)
     {
         $post = Post::find($id);
+        $oldCategoryIds = $post->categories->pluck('id')->toArray();
         $categories = Category::all();
 
-        return view('posts.edit', compact('post', 'categories'));
+        return view('posts.edit', compact('post', 'categories', 'oldCategoryIds'));
     }
 
     public function update(PostRequest $request, $id)
     {
-        $post = Post::find($id);
+        // Get post by id
+        $post = Post::findOrFail($id);
 
-        $post->update($request->only(['title', 'body']));
-
-        if(count($request->categories) > 0) {
-            CategoryPost::where('post_id', $post->id)->delete();
+        // delete old image
+        foreach($post->images as $image) {
+            if(Storage::exists($image->path)) {
+                unlink(public_path($image->path));
+            }
+            PostImage::where('post_id', $post->id)->delete();
         }
-        foreach ($request->categories as $categoryId) {
-            CategoryPost::insert([
+
+        // upload a image
+        foreach($request->images as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $dir = public_path('upload/images');
+            $file->move($dir, $filename);
+
+            PostImage::create([
                 'post_id' => $post->id,
-                'category_id' => $categoryId,
+                'path' => '/upload/images/' . $filename,
             ]);
         }
 
-        $request->session()->flash('success', 'A post was updated successful!');
+        // update post
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+        ]);
 
-        return redirect('/posts');
+        $post->categories()->sync($request->category_ids);
+        return redirect('/posts')->with('success', 'A post was updated successfully.');
     }
 
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::select(['posts.*', 'users.name as author'])
+        ->join('users', 'users.id', 'posts.user_id')
+        ->where('posts.id', $id)
+        ->first();
 
         return view('posts.show', compact('post'));
     }
@@ -84,6 +112,6 @@ class PostController extends Controller
     {
         Post::destroy($id);
 
-        return redirect('/posts')->with('success', 'A post was deleted successful!');
+        return redirect('/posts')->with('success', 'A post was deleted successfully.');
     }
 }

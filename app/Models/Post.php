@@ -10,12 +10,13 @@ class Post extends Model
 {
     use HasFactory;
 
-    // protected $fillable = [
-    //     'title',
-    //     'name'
-    // ];
+    protected $fillable = [
+        'title',
+        'name',
+        'body'
+    ];
 
-    protected $guarded = [];
+    // protected $guarded = [];
 
     public function isOwnPosts()
     {
@@ -27,8 +28,18 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(PostImage::class);
     }
 }
