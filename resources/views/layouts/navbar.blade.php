@@ -23,9 +23,15 @@
                 @if(Auth::check())
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if(auth()->user()->image)
+                            <img class="rounded-circle" src="{{ Storage::url(auth()->user()->image) }}" alt="" width="30" height="30">
+                        @else
+                            <img src="/upload/images/profile.png" alt="">
+                        @endif
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li class="px-3"><a class="text-dark text-decoration-none" href="{{ route('profile.index') }}">Profile</a></li>
                         <li>
                             <form id="logout-form" action="{{ url('logout') }}" method="POST">
                                 @csrf
