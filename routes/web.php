@@ -6,7 +6,9 @@ use App\Http\Controllers\MyPostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChangePasswordController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 Route::redirect('/', '/posts');
@@ -41,6 +43,11 @@ Route::post('logout', [LoginController::class, 'destroy']);
 
 Route::get('my-posts', [MyPostController::class, 'index']);
 
-Route::get('profile', [UserController::class, 'index'])->name('profile.index')->middleware('myauth');
-Route::put('profile/{id}', [UserController::class, 'update'])->name('profile.update')->middleware('myauth');
+Route::middleware('auth')->group(function() {
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change_password.edit');
+    Route::post('change-password', [ChangePasswordController::class, 'update'])->name('change_password.update');
+});

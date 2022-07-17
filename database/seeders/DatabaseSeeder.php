@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Thin Thin',
             'email' => 'thinthin@gmail.com',
             'password' => bcrypt('12345678'),
-            'image' => '/upload/images/profile.png'
         ]);
         $this->call(UserSeeder::class);
         $this->call(PostSeeder::class);

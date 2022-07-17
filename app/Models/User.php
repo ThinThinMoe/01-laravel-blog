@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -51,5 +52,18 @@ class User extends Authenticatable
     public function latestPosts()
     {
         return $this->posts()->orderBy('id', 'desc')->paginate();
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function photo()
+    {
+        if($this->image) {
+            return Storage::url($this->image->path);
+        }
+        return url('/upload/images/profile.png');
     }
 }

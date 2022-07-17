@@ -10,7 +10,6 @@ use App\Models\PostImage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
 class PostController extends Controller
 {
     public function index(Request $request)
