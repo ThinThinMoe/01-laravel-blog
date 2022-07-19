@@ -51,3 +51,9 @@ Route::middleware('auth')->group(function() {
     Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change_password.edit');
     Route::post('change-password', [ChangePasswordController::class, 'update'])->name('change_password.update');
 });
+
+
+Route::get('collect', function() {
+    $arr = collect([1,2,3,4]);
+    dd($arr->count());
+});
