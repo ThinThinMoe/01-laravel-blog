@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Response;
 
@@ -13,17 +14,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest('id')->get();
-        $products = $products->map(function($product) {
-            $product->price = number_format($product->price);
-            $product->created_at = $product->created_at->diffForHumans();
-            return $product;
-        });
-
-        if(!$products) {
-            return response()->json([], Response::HTTP_NOT_FOUND);
-        }
-
-        return response()->json($products, Response::HTTP_OK);
+        return ProductResource::collection($products);
     }
 
     public function store(ProductStoreRequest $request)
@@ -34,13 +25,11 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        $product->price = number_format($product->price);
-        $product->created_at = $product->created_at->diffForHumans();
         if(!$product) {
             return response()->json([], Response::HTTP_NOT_FOUND);
         }
 
-        return response()->json($product, Response::HTTP_OK);
+        return new ProductResource($product);
     }
 
     public function update(ProductUpdateRequest $request, $id)

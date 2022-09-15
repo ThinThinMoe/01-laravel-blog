@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\PostImage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
@@ -19,6 +20,16 @@ class PostController extends Controller
                 ->paginate(3);
 
         return view('posts.index', compact('posts'));
+    }
+
+    public function sendMail()
+    {
+        Mail::raw('mail send testing', function($mail) {
+            $mail->to('scm.thinthinmoe@gmail.com')
+            ->subject('mail send testing');
+        });
+        
+        return "done";
     }
 
     public function create()

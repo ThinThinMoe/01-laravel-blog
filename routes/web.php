@@ -8,8 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChangePasswordController;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 Route::redirect('/', '/posts');
 
@@ -21,7 +20,7 @@ Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('myauth
 Route::patch('/posts/{id}', [PostController::class, 'update']);
 Route::get('/posts/{id}', [PostController::class, 'show'])->middleware('myauth')->name('post.show');
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('myauth')->name('post.delete');
-
+Route::get('/mail/send', [PostController::class, 'sendMail'])->name('mail.send');
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/categories/create', [CategoryController::class, 'create'])->middleware('myauth')->name('category.create');
@@ -50,10 +49,4 @@ Route::middleware('auth')->group(function() {
 
     Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change_password.edit');
     Route::post('change-password', [ChangePasswordController::class, 'update'])->name('change_password.update');
-});
-
-
-Route::get('collect', function() {
-    $arr = collect([1,2,3,4]);
-    dd($arr->count());
 });
